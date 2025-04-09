@@ -3,6 +3,7 @@ package com.alejandrosanchez.account.controller;
 import com.alejandrosanchez.account.dto.AccountReportDTO;
 import com.alejandrosanchez.account.model.Account;
 import com.alejandrosanchez.account.service.AccountService;
+import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,13 +35,13 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<Account> createAccount(@RequestBody Account account) {
+    public ResponseEntity<Account> createAccount(@RequestBody @Valid Account account) {
         Account savedClient = accountService.save(account);
         return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Account> updateAccount(@PathVariable Long id, @RequestBody Account account) {
+    public ResponseEntity<Account> updateAccount(@PathVariable Long id, @RequestBody @Valid Account account) {
         Optional<Account> updatedAccount = accountService.update(id, account);
         return updatedAccount.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }

@@ -1,6 +1,5 @@
 package com.alejandrosanchez.account.dto;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class AccountDetailsDTO {

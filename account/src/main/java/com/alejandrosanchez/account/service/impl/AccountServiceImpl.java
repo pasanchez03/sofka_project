@@ -48,14 +48,17 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account save(Account account) {
+        ClientDTO client;
         try {
-            ClientDTO client = clientServiceClient.getClientById(account.getClientId()).getBody();
-            if (client == null || !client.getActive()) {
-                throw new IllegalArgumentException("Cliente no encontrada");
-            }
+            client = clientServiceClient.getClientById(account.getClientId()).getBody();
         } catch (FeignException.NotFound e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado en client-service.");
         }
+
+        if (client == null || !Boolean.TRUE.equals(client.getActive())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cliente inactivo o inválido");
+        }
+
         return accountRepository.save(account);
     }
 

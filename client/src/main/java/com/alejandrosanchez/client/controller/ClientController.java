@@ -2,6 +2,7 @@ package com.alejandrosanchez.client.controller;
 
 import com.alejandrosanchez.client.model.Client;
 import com.alejandrosanchez.client.service.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,13 +32,13 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<Client> createClient(@RequestBody Client client) {
+    public ResponseEntity<Client> createClient(@RequestBody @Valid Client client) {
         Client savedClient = clientService.save(client);
         return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> updateClient(@PathVariable Long id, @RequestBody Client client) {
+    public ResponseEntity<Client> updateClient(@PathVariable Long id, @RequestBody @Valid Client client) {
         Optional<Client> existingClient = clientService.getByIdAndActiveTrue(id);
         if (existingClient.isPresent()) {
             client.setId(id);
